@@ -1,0 +1,97 @@
+Task 01
+
+The body weight of individuals interviewed in the HSE1 is considered.
+Data set → HSE.xlsx
+The variable for the body weight is wtval measured in kilograms.
+Using R, generate a boxplot broken down by gender (variable sex).
+How can the boxplot be interpreted?
+
+Library
+```{r}
+library(readxl)
+```
+
+Loading data 
+```{r}
+# Load data
+df.body.weight <- read_excel("HSE.xlsx")
+
+# Inspect data
+head(df.body.weight)
+
+# Inspect unique values of Sex
+unique(df.body.weight$sex)
+```
+Plot
+```{r}
+boxplot(wtval ~ sex, data = df.body.weight, 
+        main = "Body weight by Sex", 
+        xlab = "Sex",
+        ylab = "Body weight", 
+        col = c("lightblue", "lightpink"))
+```
+Interpretation: The boxplot shows the distribution of body weight by sex. Both groups Sex 1 and Sex 2 display similar variability in their data. However, Sex 1 showa a higher median body weight than Sex 2, suggesting that individuals in Sex 1 generally have a higher body weight on average.
+
+The body weight range for Sex 1 extends approximately from 50 kg to 120 kg, whereas Sex 2 ranges from about 20 kg to 100 kg. Sex 1 also shows a larger number of outliers, with extreme values both at the lower end around 30–50 kg and the upper end around 120–170 kg. Whereas, Sex 2 shows fewer outliers only on the higher end around 100–180 kg.
+
+Both sexes seem to be right skewed. 
+
+Overall, the plot suggests that Sex 1 tends to have higher body weights and more extreme values compared to Sex 2. 
+
+
+Histogram to confirm distribution
+```{r}
+# Split data into separate subsets
+HSE_m <- subset(df.body.weight, sex == 1)
+HSE_f <- subset(df.body.weight, sex == 2)
+
+# Create Histograms
+hist(HSE_m$wtval, main = "Body Weight Distribution for Men", xlab = "Men")
+hist(HSE_f$wtval, main = "Body Weight Distribution for Women", xlab = "Women")
+```
+This confirms the assumption that the distributions of both men and women are rightskewed. 
+
+Task 02
+```{r}
+# Load Data
+task.02 <- read_excel("task_02.xlsx")
+
+# Inspect data 
+head(task.02)
+```
+
+Boxplots 
+Boxplot Variable A
+```{r}
+# Boxplot for Variable A
+boxplot(x = task.02$Variable_A, main = "Boxplot for Variable A", 
+        xlab = "Variable A")
+```
+Boxplot Variable B
+```{r}
+#Box plot for Variable B
+boxplot(x = task.02$Variable_B, main = "Boxplot for Variable B", 
+        xlab = "Variable B")
+```
+Box plot Variable C
+```{r}
+# Box plot for Variable C
+boxplot(x = task.02$Variable_C, main = "Boxplot for Variable C", 
+        xlab = "Variable C")
+```
+
+Histograms 
+Variable A
+```{r}
+# Histogram distribution Variable A
+hist(x = task.02$Variable_A)
+```
+Variable B 
+```{r}
+hist(x = task.02$Variable_B)
+```
+Variable C
+```{r}
+hist(x = task.02$Variable_C)
+```
+The histogtams confirm our conclusions. s
