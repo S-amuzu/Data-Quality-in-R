@@ -1,0 +1,122 @@
+TASK 01
+
+A data set riskfactors is given1
+
+What is the structure of the missings?
+Are the elements of the data set completely at random (MCAR)?
+Apply a MCAR test.
+
+Describe the results – insert also the R-code, the R-output and if necessary, R-plots.
+Hint: There is an example for testing whether MCAR is given → ## Missing pattern
+You might try it out together with the data set airquality2. 
+
+Install packages 
+```{r}
+install.packages("mice")
+install.packages("naniar")
+```
+
+Load Libraries
+```{r}
+library(naniar)
+library(mice)
+```
+Explore data structure
+```{r}
+head(riskfactors)
+```
+What is the structure of the missings?
+Are the elements of the data set completely at random (MCAR)?
+Apply a MCAR test.
+```{r}
+mcar_test(riskfactors)
+```
+##Interpretation: The test output shows a small p-value shows a strong evidence that we reject the null hypothesis, meaning the missing values in the riskfactors data set are not missing completely at random. 
+
+if necessary, R-plots
+```{r}
+md.pattern(riskfactors)
+```
+
+
+You might try it out together with the data set airquality2. 
+
+Explore data structure
+```{r}
+head(airquality)
+```
+MCAR?
+```{r}
+mcar_test(airquality)
+```
+##Interpretation: The test output also shows a p-value less than 0.005, meaning that there is strong evidence that we reject the null hypothesis, meaning the missing values in the airquality data set are not missing completely at random. 
+
+R-plot
+```{r}
+md.pattern(airquality)
+```
+
+
+TASK 02
+Missing analysis
+Data set: grades.xlsx Data set: HSE_part.xlsx 
+A data set grades is given3
+
+There are missing in the data set.
+Using R, analyze the missing structure.
+Apply single imputation for types "mean" and "sample" and compare them.
+With this setting you will get to know the two simplest methods of MICE.
+Describe the results – insert also the R-code, the R-output and if necessary, R-plots.
+
+```{r}
+library(readxl)
+grades <- read_excel("grades.xlsx")
+```
+
+
+There are missing in the data set.
+```{r}
+sum(is.na(grades))
+```
+
+Using R, analyze the missing structure.
+```{r}
+mcar_test(grades)
+```
+## Since the test shows a p-value > 0.05, this means that we do not reject the null hypothesis, and these missing values are missing completely at random (MCAR). 
+
+R plot 
+```{r}
+md.pattern(grades)
+```
+
+Apply single imputation for types "mean" and "sample" and compare them.
+simple imputation mean 
+```{r}
+imp_grades_mean <- mice(grades, method = "mean", m = 1, maxit = 1)
+```
+
+simple imputation sample 
+```{r}
+imp_grades_sample <- mice(grades, method = "sample", m = 1, maxit = 1)
+```
+
+Extracting completed dataset 
+```{r}
+grades_mean   <- complete(imp_grades_mean)
+grades_sample <- complete(imp_grades_sample)
+```
+
+```{r}
+missing_rows <- which(!complete.cases(grades))
+grades[missing_rows, ]
+```
+```{r}
+grades_mean[missing_rows, ]
+```
+
+
+```{r}
+grades_sample[missing_rows, ]
+```
+##Interpretation: All missing values replaced by the mean had identical mean valuees in the final coloumn, whereas for the sample the missing values were replaced by a random observation, keeping the natual spread of the data. 
