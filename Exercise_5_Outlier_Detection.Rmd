@@ -1,0 +1,65 @@
+
+```{r}
+library(outliers)
+library(readxl)
+library(EnvStats)
+```
+
+Task 01
+A data set HSE is given1
+How does the outlier pattern look like?
+Show the characteristics of the data by using visualization techniques.
+Describe the results – insert also the R-code, the R-output and if necessary, R-plots
+
+```{r}
+# Load data in R
+hse <- read_excel("HSE.xlsx")
+
+# Explore data 
+head(hse, n=10)
+```
+
+Visualisation 
+```{r}
+# Summary statistics
+summary(hse$wtval)
+
+# Histogram 
+hist(hse$wtval, breaks = sqrt(nrow(hse))) # to decide how many bins 
+
+# Outliers 
+out <- boxplot.stats(hse$wtval)$out
+length(out)
+
+# Boxplot
+boxplot(hse$wtval, main = "Boxplot for hse$wtval")
+```
+Description of Histogram: The histogram of wtval shows a right-skewed distribution, with most observations concentrated between 60 and 90. The distribution forms a long right tail with the presence of extreme high values (outliers) in the higher range.   
+
+Description of Boxplot: The boxplot confirms the right-skewed pattern. The median wtval is approximately 75, and 50% of the data fall within the interquartile range of roughly 60 to 80. The upper whisker extends to around 110, beyond the upper whiskers are large number of upper outliers. The lower whisker reaches roughly 40. 
+
+
+Task 02
+A data set HSE is given2
+
+Perform an outlier test according to Grubbs.
+Also reflect on the hypothesis structure that goes with this test.
+Perform an outlier test according to Rosner.
+Describe the results – insert also the R-code, the R-output and if necessary, R-plots.
+```{r}
+# Grubbs test 
+grubbs_test <- grubbs.test(hse$wtval)
+grubbs_test
+```
+The p-value is less than the significance level of 0.05 which means that the highest value 184.3 is an outlier. 
+
+Rosner test
+```{r}
+# Rosner test
+
+rosner_test <- rosnerTest(hse$wtval, k = 199)
+rosner_test$all.stats
+
+```
+Description - k = 199 because the number of suspected outliers identified from the boxplot is 199. Here the Rosner test tells us which data points are consideed as outliers and which arent based on TRUE (Outlier) or FALSE (Not an Outlier)
+
