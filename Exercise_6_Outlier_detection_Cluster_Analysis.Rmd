@@ -1,0 +1,52 @@
+```{r}
+library(readxl)
+```
+
+Task 01
+Outlier detection applying k-means clustering
+Data set: learning.xlsx 
+
+A data set learning2 is given.
+Run a "Cluster Based" outlier detection applying k-means clustering after Barai & Dey (2017)3
+Calculate solutions of two different numbers of clusters.
+x = 3 and x = 4 in kmeans(datas, centers = x, nstart = 10)4
+How can the solutions be interpreted?
+```{r}
+# Load data in
+learning <- read_excel("learning.xlsx")
+
+# Explore data 
+head(learning, n = 10)
+```
+Visualisation
+
+```{r}
+plot(learning$success, learning$effort)
+boxplot(learning)
+```
+Scale Data - Visualisation
+```{r}
+data <- scale(learning, center = FALSE, scale = TRUE)
+boxplot(data)
+plot(data)
+```
+
+Cluster Analysis - 4
+```{r}
+km_4 <- kmeans(data, centers = 4, nstart = 10)
+groups_km_4 <- km_4$cluster
+plot(data, pch = groups_km_4, col=groups_km_4, lwd=2)
+legend("topright", legend = 1:4, pch = 1:4, col=1:4, bty = "n")
+```
+Cluster - Analysis 3 Clusters 
+```{r}
+km_3 <- kmeans(data, centers = 3, nstart = 10)
+groups_km_3 <- km_3$cluster
+plot(data, pch = groups_km_3, col=groups_km_3, lwd=2)
+legend("topright", legend = 1:3, pch = 1:3, col=1:3, bty = "n")
+```
+ With k = 3, k-means identifies three broad groups of students: a low effort and low-success group, a medium effort and medium to high effort and high success group, and lastly a high effort and low success group.
+
+With k = 4, the algorithm splits the medium to high effort group into two distinct subgroups: high effort and high success and medium effort and high success. This provides a more nuanced understanding of performance, highlighting that students who invest similar levels of effort may achieve very different outcomes.
+
+Therefore, k = 4 offers a more detailed structure, clearly separating the clusters and showing the differences whereas k = 3 provides a simpler but less detailed representation.
