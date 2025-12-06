@@ -1,0 +1,59 @@
+Task 01
+Application of RANSAC
+Data set: learning.xlsx 
+Data set: RANSAC.xlsx 
+The data set learning1 is given.
+
+```{r}
+library(pracma)
+library(readxl)
+library(questionr)
+library(dbscan)
+```
+
+
+Load RANSAC and learning.xlsx data 
+```{r}
+# Load Ransac and learning data
+learning.data <- read_excel("learning.xlsx")
+ransac.data <- read_excel("RANSAC.xlsx")
+
+# Explore the data 
+head(learning.data, n = 10)
+
+head(ransac.data, n = 10)
+```
+Rename Variables 
+```{r}
+learning.data <- rename.variable(learning.data, "success", "y")
+learning.data <- rename.variable(learning.data, "effort", "x")
+head(learning.data)
+```
+Visualisation 
+```{r}
+plot(learning.data)
+```
+Visually, we can identify that there may be four clusters, however, three clusters are relatively close to each other compared to the cluster to the right hand corner. This cluster may be an outlier due to it being further away from the others.DBscan can be used to help determine whether this cluster may be an outlier. Before running a DBScan, it is required to identify the eps value which can be determined using KNN distance plot. 
+
+
+TASK 02
+The data set learning2 is given.
+Run the DBSCAN algorithm to determine, whether there are outliers.
+Describe the results – insert also the R-code, the R-output and if necessary, R-plots
+
+KNN distance plot 
+```{r}
+kNNdistplot(learning.data, k = 4)
+```
+We pick 1.3 for eps because we are looking to determine the sudden increase which is 1.3. The sudden increase is where there are most likely outliers. 
+
+DBSCAN 
+```{r}
+dbscanResult <- dbscan(learning.data, eps = 1.3, minPts = 4)
+dbscanResult
+```
+Hull plot 
+```{r}
+hullplot(learning.data, dbscanResult)
+```
+The DBscan result shows that there are 4 clusters and one noise point in the left corner of the plot. So the cluster we suspected to be an outlier is not an outlier. Therefore, we can consider it as another cluster. 
